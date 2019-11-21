@@ -1,4 +1,5 @@
 # koa2-startkit
+## 摘自 https://github.com/17koa/koa2-startkit
 [![Build Status](https://travis-ci.org/17koa/koa2-startkit.svg?branch=master)](https://travis-ci.org/17koa/koa2-startkit)  
 一个 Koa2 的脚手架
 
