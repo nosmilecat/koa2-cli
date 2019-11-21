@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= body %></title>
+    <link rel='stylesheet' href='/static/stylesheets/style.css' />
+  </head>
+  <body>
+    <h1><%= body %></h1>
+    <p>EJS Welcome to <%= body %></p>
+
+
+
+
+    <script>
+      var a = JSON.parse('<%- JSON.stringify(body)%>');
+      console.log(a)
+    </script>
+  </body>
+</html>
