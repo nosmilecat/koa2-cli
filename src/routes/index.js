@@ -9,6 +9,14 @@ router.get('/', async (ctx, next) => {
   ctx.body = 'api'
 })
 
+
+
+
+router.post('/login', controller.login.index)
+
+
+
+
 router.get('/users/find', controller.users.find)
 
 router.post('/users/insert', controller.users.insert)

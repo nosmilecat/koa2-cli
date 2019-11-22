@@ -10,6 +10,8 @@ import koaStatic from 'koa-static-plus'
 import koaOnError from 'koa-onerror'
 import config from './config'
 import routerResponse from './middleware/routerResponse'
+import koaJwt  from 'koa-jwt'
+import jwt from 'jsonwebtoken'
 const app = new Koa()
 const bodyparser = Bodyparser()
 
@@ -19,6 +21,54 @@ app.use(convert(json()))
 app.use(convert(logger()))
 app.use(routerResponse())
 
+import cors from 'koa2-cors'
+// 允许跨域
+app.use(cors())
+
+
+// 路由权限控制
+// 处理没有权限时的异常
+const jwtSecret = 'jwtSecret'
+app.use(async (ctx, next) => {
+  if (ctx.header && ctx.header.authorization) {
+    const parts = ctx.header.authorization.split(' ');
+    if (parts.length === 2) {
+      //取出token
+      const scheme = parts[0];
+      const token = parts[1];
+      if (/^Bearer$/i.test(scheme)) {
+        //jwt.verify方法验证token是否有效
+        jwt.verify(token, jwtSecret, (err, authData) => {
+          if(err) {
+            // 无效或过期
+            console.log(err)
+          } else {
+            // 每次都会返回新的token
+            const payload = {user_name: authData.user_name, id: authData.id};      
+            const newToken = jwt.sign(payload, jwtSecret, { expiresIn: 60 * 30 });
+            //将新token放入Authorization中返回给前端
+            ctx.res.setHeader('Authorization', newToken);
+
+          }
+        });
+      }
+    }
+  }
+  return next().catch((err) => {
+      if (401 == err.status) {
+          ctx.status = 401;
+          ctx.fail('token无效', 401);
+      } else {
+          throw err;
+      }
+  });
+});
+// 前端携带token方式 headers  Authorization: `Bearer ${token}`
+app.use(koaJwt({secret:jwtSecret}).unless({
+  path:[/^\/api\/login/]
+}))
+
+
 // static
 app.use(convert(koaStatic(path.join(__dirname, '../public'), {
   pathPrefix: ''
@@ -26,7 +76,7 @@ app.use(convert(koaStatic(path.join(__dirname, '../public'), {
 
 // views
 app.use(views(path.join(__dirname, '../views'), {
-  map : {html:'ejs'}
+  map: {html: 'ejs'}
 }))
 
 // 500 error
@@ -42,13 +92,10 @@ app.use(async (ctx, next) => {
   console.log(`${ctx.method} ${ctx.url} - ${ms}ms`)
 })
 
-
 // response router
 app.use(async (ctx, next) => {
   await require('./routes').routes()(ctx, next)
 })
-
-
 
 // 404
 app.use(async (ctx) => {
