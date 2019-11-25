@@ -46,6 +46,7 @@ app.use(async (ctx, next) => {
             // 每次都会返回新的token
             const payload = {user_name: authData.user_name, id: authData.id};      
             const newToken = jwt.sign(payload, jwtSecret, { expiresIn: 60 * 30 });
+            global.user_id  = authData.id;
             //将新token放入Authorization中返回给前端
             ctx.res.setHeader('Authorization', newToken);
 

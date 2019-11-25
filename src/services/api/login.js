@@ -1,19 +1,13 @@
 import loginModel from '../../models/login'
 import jwt from 'jsonwebtoken';
-class usersService {
+class loginService {
   static async index (data) {
-    if (!data.name || !data.password) {
-      return {
-        code: 10110,
-        msg: '用户名或密码不能为空！'
-      }
-    }
     let res = await loginModel.findOne({where: { name: data.name } , raw: true});
     console.log(res)
     if (!res) {
       return {
         code: 10110,
-        msg: '用户名不存在或密码错误！'
+        msg: '用户名不存在或密码错误！!'
       }
     }
     if (res.password == data.password) {
@@ -33,4 +27,4 @@ class usersService {
   }
 }
 
-module.exports = usersService
+module.exports = loginService

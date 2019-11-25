@@ -11,9 +11,8 @@ router.get('/', async (ctx, next) => {
 
 
 
-
 router.post('/login', controller.login.index)
-
+router.get('/hobby', controller.hobby.list)
 
 
 
