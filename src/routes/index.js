@@ -1,27 +1,13 @@
 import Router from 'koa-router'
 import controller from '../controllers'
+import apiRouter from './api'
+import viewRouter from './view'
 
 const router = Router()
-
-router.prefix('/api')
-
-router.get('/', async (ctx, next) => {
-  ctx.body = 'api'
+router.get('/', async (ctx) => {
+  await ctx.redirect('/view')
 })
-
-
-
-router.post('/login', controller.login.index)
-router.get('/hobby', controller.hobby.list)
-
-
-
-router.get('/users/find', controller.users.find)
-
-router.post('/users/insert', controller.users.insert)
-
-router.delete('/users/delete', controller.users.delete)
-
-router.put('/users/update', controller.users.update)
+router.use('/view', viewRouter)
+router.use('/api', apiRouter)
 
 export default router

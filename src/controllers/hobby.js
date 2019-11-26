@@ -1,4 +1,4 @@
-const service = require('../services/api/hobby')
+import service from '../services/api/hobby'
 class hobbyController {
   static async list (ctx) {
     let data = await service.list(ctx.query)

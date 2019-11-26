@@ -66,7 +66,7 @@ app.use(async (ctx, next) => {
 });
 // 前端携带token方式 headers  Authorization: `Bearer ${token}`
 app.use(koaJwt({secret:jwtSecret}).unless({
-  path:[/^\/api\/login/]
+  path:[/^\/api\/login/, /^\/api\/carousel/, /^\/view/, /^\/$/]
 }))
 
 

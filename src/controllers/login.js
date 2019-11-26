@@ -1,4 +1,4 @@
-const service = require('../services/api/login')
+import service from '../services/api/login'
 class loginController {
   static async index (ctx) {
     // controllers 做参数校验，service做业务逻辑
