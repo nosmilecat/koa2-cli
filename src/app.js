@@ -21,6 +21,8 @@ app.use(convert(json()))
 app.use(convert(logger()))
 app.use(routerResponse())
 
+
+
 import cors from 'koa2-cors'
 // 允许跨域
 app.use(cors())
@@ -66,7 +68,7 @@ app.use(async (ctx, next) => {
 });
 // 前端携带token方式 headers  Authorization: `Bearer ${token}`
 app.use(koaJwt({secret:jwtSecret}).unless({
-  path:[/^\/api\/login/, /^\/api\/carousel/, /^\/view/, /^\/$/]
+  path:[/^\/api\/login/, /^\/api\/carousel/, /^\/view/, /^\/upload/, /^\/$/]
 }))
 
 
